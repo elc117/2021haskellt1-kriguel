@@ -22,6 +22,7 @@ Será gerado o arquivo 'image.svg' com a imagem
 ---
 
 #### Exemplo:
+![alt text](https://raw.githubusercontent.com/elc117/2021haskellt1-kriguel/master/image.svg)
 
 ---
 
