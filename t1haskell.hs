@@ -1,10 +1,14 @@
-{------------------------------------------------------------------------------------------------------------
-|                                TRABALHO 1 - PARADIGMAS DE PROGRAMACAO                                     |
-|                                    PROGRAMACAO FUNCIONAL - HASKELL                                        | 
--------------------------------------------------------------------------------------------------------------
+{--------------------------------------------------------------------------------------------------------------------
+|                                     TRABALHO 1 - PARADIGMAS DE PROGRAMACAO                                        |
+|                                         PROGRAMACAO FUNCIONAL - HASKELL                                           | 
+---------------------------------------------------------------------------------------------------------------------
     Prof Andrea Schwertner Charao
     Aluno: Leonardo Cargnin Krugel
--}-----------------------------------------------------------------------------------------------------------
+-}-------------------------------------------------------------------------------------------------------------------
+
+{--------------------------------------------------------------------------------------------------------------------
+|                                          Imports e definicoes                                                     |
+-}-------------------------------------------------------------------------------------------------------------------
 
 import Text.Printf
 
@@ -15,7 +19,9 @@ type Circle    = (Point,Float,Int)
 type Triangle  = (Point,Point,Point)
 
 
--------------------------------------------------------------------------------------------------------------
+{--------------------------------------------------------------------------------------------------------------------
+|                                       Funcoes que manipulam cores                                                 |
+-}-------------------------------------------------------------------------------------------------------------------
 
 invertRGB :: Color -> Color
 invertRGB (r,g,b) = (255-r,255-g,255-b)
@@ -26,29 +32,43 @@ colorRGB (r,g,b) = [original,inverted]
         where original = (r,g,b)
               inverted = invertRGB (r,g,b)
 
--------------------------------------------------------------------------------------------------------------
+{--------------------------------------------------------------------------------------------------------------------
+|                                 Funcoes que constroem a bandeira do Brasil                                        |
+-}-------------------------------------------------------------------------------------------------------------------
 
-flagRects :: (Float,Float) -> [Rect]
-flagRects (w,h) = [rectangleLeft,rectangleRight]
+flagBR :: (Float,Float) -> String
+flagBR (w,h) = rectangle ++ diamond ++ circle
+        where rectangle = svgElements svgRect (flagBRRects (w,h)) (map svgStyle (colorRGB brGreen))
+              diamond = svgElements svgThreePointPath (flagBRTriangs (w,h)) (map svgStyle (colorRGB brYellow))
+              circle = svgElements svgSemiCircle (flagBRCircs (w,h)) (map svgStyle (colorRGB brBlue))
+              brGreen = (0,168,89)
+              brYellow = (255,204,41)
+              brBlue = (62,64,149)
+
+
+flagBRRects :: (Float,Float) -> [Rect]
+flagBRRects (w,h) = [rectangleLeft,rectangleRight]
         where rectangleLeft = ((0.0,0.0),w/2,h)
               rectangleRight = ((w/2,0),w,h)
 
 
-flagCircles :: (Float,Float) -> [Circle]
-flagCircles (w,h) = [circleLeft,circleRight]
+flagBRCircs :: (Float,Float) -> [Circle]
+flagBRCircs (w,h) = [circleLeft,circleRight]
         where circleLeft = ((w/2,h/2),(3.5*n),1)
               circleRight = ((w/2,h/2),(3.5*n),0)
               n = w/20
 
 
-flagTriangles :: (Float,Float) -> [Triangle]
-flagTriangles (w,h) = [triangleLeft,triangleRight]
+flagBRTriangs :: (Float,Float) -> [Triangle]
+flagBRTriangs (w,h) = [triangleLeft,triangleRight]
         where triangleLeft = ((1.7*n,h/2),(w/2,1.7*n),(w/2,h-1.7*n))
               triangleRight = ((w-1.7*n,h/2),(w/2,1.7*n),(w/2,h-1.7*n))
               n = w/20
 
 
--------------------------------------------------------------------------------------------------------------
+{--------------------------------------------------------------------------------------------------------------------
+|                                      Funcoes das figuras svg                                                      |
+-}-------------------------------------------------------------------------------------------------------------------
 
 svgRect :: Rect -> String -> String 
 svgRect ((x,y),w,h) style = 
@@ -66,7 +86,9 @@ svgSemiCircle ((xc,yc),r,side) style =
             xc (yc-r) xc (yc+r) r r side xc (yc-r) style
 
 
--------------------------------------------------------------------------------------------------------------
+{--------------------------------------------------------------------------------------------------------------------
+|                                          Funcoes gerais svg                                                       |
+-}-------------------------------------------------------------------------------------------------------------------
 
 
 svgBegin :: Float -> Float -> String
@@ -86,17 +108,13 @@ svgElements :: (a -> String -> String) -> [a] -> [String] -> String
 svgElements func elements styles = concat $ zipWith func elements styles
 
 
--------------------------------------------------------------------------------------------------------------
+{--------------------------------------------------------------------------------------------------------------------
+|                                           Funcao main                                                             |
+-}-------------------------------------------------------------------------------------------------------------------
 
 main :: IO ()
 main = do
     writeFile "image.svg" $ svgstrs
     where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
-          svgfigs = rectangle ++ diamond ++ circle
-          rectangle = svgElements svgRect (flagRects (w,h)) (map svgStyle (colorRGB brGreen))
-          diamond = svgElements svgThreePointPath (flagTriangles (w,h)) (map svgStyle (colorRGB brYellow))
-          circle = svgElements svgSemiCircle (flagCircles (w,h)) (map svgStyle (colorRGB brBlue))
-          brGreen = (0,168,89)
-          brYellow = (255,204,41)
-          brBlue = (62,64,149)
+          svgfigs = flagBR (w,h)
           (w,h) = (1500,(14/20)*w)
