@@ -12,10 +12,10 @@ metade da direita tem as cores invertidas.
 
 ---
 
-#### Como executar:
-No Shell:
-`$ ghci t1haskell.hs`
-`*Main> main`
+#### Como executar:  
+No Shell:  
+`$ ghci t1haskell.hs`  
+`*Main> main`  
 
 Será gerado o arquivo 'image.svg' com a imagem
 
