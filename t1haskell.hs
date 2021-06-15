@@ -15,7 +15,7 @@ import Text.Printf
 type Color     = (Int,Int,Int)
 type Point     = (Float,Float)
 type Rect      = (Point,Float,Float)
-type Circle    = (Point,Float,Int)
+type Circle    = (Point,Float,Int)       -- O 'Int' eh utilizado para desenhar o semi-circulo usando svg path
 type Triangle  = (Point,Point,Point)
 
 
@@ -49,7 +49,7 @@ flagBR (w,h) = rectangle ++ diamond ++ circle
 flagBRRects :: (Float,Float) -> [Rect]
 flagBRRects (w,h) = [rectangleLeft,rectangleRight]
         where rectangleLeft = ((0.0,0.0),w/2,h)
-              rectangleRight = ((w/2,0),w,h)
+              rectangleRight = ((w/2,0.0),w,h)
 
 
 flagBRCircs :: (Float,Float) -> [Circle]
@@ -64,6 +64,50 @@ flagBRTriangs (w,h) = [triangleLeft,triangleRight]
         where triangleLeft = ((1.7*n,h/2),(w/2,1.7*n),(w/2,h-1.7*n))
               triangleRight = ((w-1.7*n,h/2),(w/2,1.7*n),(w/2,h-1.7*n))
               n = w/20
+
+
+{--------------------------------------------------------------------------------------------------------------------
+|                                 Funcoes que constroem a bandeira do Japao                                         |
+-}-------------------------------------------------------------------------------------------------------------------
+
+flagJP :: (Float,Float) -> String
+flagJP (w,h) = rectangle ++ circle
+        where rectangle = svgElements svgRect (flagJPRects (w,h)) (map svgStyle (colorRGB jpWhite))
+              circle = svgElements svgSemiCircle (flagJPCircs (w,h)) (map svgStyle (colorRGB jpRed))
+              jpRed = (190,0,41)
+              jpWhite = (255,255,255)
+
+
+flagJPRects :: (Float,Float) -> [Rect]
+flagJPRects (w,h) = [rectangleLeft,rectangleRight]
+        where rectangleLeft = ((0.0,0.0),w/2,h)
+              rectangleRight = ((w/2,0.0),w,h)
+
+
+flagJPCircs :: (Float,Float) -> [Circle]
+flagJPCircs (w,h) = [circleLeft,circleRight]
+        where circleLeft = ((w/2,h/2),((3/5)*h),1)
+              circleRight = ((w/2,h/2),((3/5)*h),0)
+
+
+{--------------------------------------------------------------------------------------------------------------------
+|                                Funcoes que constroem a bandeira da Alemanha                                       |
+-}-------------------------------------------------------------------------------------------------------------------
+
+flagDE :: (Float,Float) -> String
+flagDE (w,h) = rectangle ++ circle
+        where stripe1 = svgElements svgRect (flagDERects (w,h) 0) (map svgStyle (colorRGB deBlack))
+              stripe2 = svgElements svgSemiCircle (flagDERects (w,h) 1) (map svgStyle (colorRGB deRed))
+              stripe3 = svgElements svgSemiCircle (flagDERects (w,h) 2) (map svgStyle (colorRGB deYellow))
+              deBlack = (0,0,0)
+              deRed = (255,0,0)              
+              deYellow = (255,204,0)
+
+
+flagDERects :: (Float,Float) -> Int -> [Rect]
+flagDERects (w,h) n = [rectangleLeft,rectangleRight]
+        where rectangleLeft = ((0.0,n*(h/3)),w/2,h/3)
+              rectangleRight = ((w/2,n*(h/3)),w,h/3)
 
 
 {--------------------------------------------------------------------------------------------------------------------
@@ -109,12 +153,27 @@ svgElements func elements styles = concat $ zipWith func elements styles
 
 
 {--------------------------------------------------------------------------------------------------------------------
-|                                           Funcao main                                                             |
+|                                Funcao main, define qual bandeira sera desenhada                                   |
 -}-------------------------------------------------------------------------------------------------------------------
 
 main :: IO ()
 main = do
-    writeFile "image.svg" $ svgstrs
-    where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
-          svgfigs = flagBR (w,h)
-          (w,h) = (1500,(14/20)*w)
+    putStrLn ("Qual bandeira?")
+    cmd <- getLine
+    if cmd == "BR"
+        then do writeFile "imageBR.svg" $ svgstrs
+            where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
+                  svgfigs = flagBR (w,h)
+                  (w,h) = (1500,(14/20)*w)
+    else if cmd == "DE"
+        then do writeFile "imageDE.svg" $ svgstrs
+            where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
+                  svgfigs = flagDE (w,h)
+                  (w,h) = (1500,(3/5)*w)
+    else if cmd == "JP" 
+        then do writeFile "imageJP.svg" $ svgstrs 
+            where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
+                  svgfigs = flagJP (w,h)
+                  (w,h) = (1500,(2/3)*w)    
+    else return ()
+    
