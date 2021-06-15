@@ -24,9 +24,9 @@ No Shell:
     
 Onde 'sigla' é uma seguintes:
 
-        BR - Brasil  
-        JP - Japão  
-        DE - Alemanha  
+    BR - Brasil  
+    JP - Japão  
+    DE - Alemanha  
         
 Então será gerado um arquivo "imageXX.svg", onde *XX* é a sigla do país escolhido.
 
