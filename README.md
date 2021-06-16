@@ -32,9 +32,15 @@ Então será gerado um arquivo "imageXX.svg", onde *XX* é a sigla do país esco
 
 Caso o usuário digite algo diferente dessas siglas o programa encerra a execução.
 
+
+#### Exemplo:
+![alt text](https://raw.githubusercontent.com/elc117/2021haskellt1-kriguel/master/image.svg)
+
+
 ---
 
 #### Referências:  
 - https://www.youtube.com/watch?v=k6TWzfLGAKo
 - http://learnyouahaskell.com
 - https://www.w3schools.com/graphics/svg_intro.asp
+
