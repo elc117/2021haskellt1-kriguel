@@ -1,5 +1,5 @@
 # TRABALHO 1 - PARADIGMAS DE PROGRAMAÇÃO  
-## PROGRAMACAO FUNCIONAL - HASKELL
+## PROGRAMAÇÃO FUNCIONAL - HASKELL
 
 
 Prof Andrea Schwertner Charao  
@@ -32,10 +32,17 @@ Então será gerado um arquivo "imageXX.svg", onde *XX* é a sigla do país esco
 
 Caso o usuário digite algo diferente dessas siglas o programa encerra a execução.
 
+---
 
-#### Exemplo:
-![alt text]()
+#### Exemplos:
+- Brasil:  
+![alt text](https://raw.githubusercontent.com/elc117/2021haskellt1-kriguel/master/imageBR.svg)  
 
+- Alemanha:  
+![alt text](https://raw.githubusercontent.com/elc117/2021haskellt1-kriguel/master/imageDE.svg)  
+
+- Japão:  
+![alt text](https://raw.githubusercontent.com/elc117/2021haskellt1-kriguel/master/imageJP.svg)  
 
 ---
 
