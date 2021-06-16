@@ -95,16 +95,16 @@ flagJPCircs (w,h) = [circleLeft,circleRight]
 -}-------------------------------------------------------------------------------------------------------------------
 
 flagDE :: (Float,Float) -> String
-flagDE (w,h) = rectangle ++ circle
-        where stripe1 = svgElements svgRect (flagDERects (w,h) 0) (map svgStyle (colorRGB deBlack))
-              stripe2 = svgElements svgSemiCircle (flagDERects (w,h) 1) (map svgStyle (colorRGB deRed))
-              stripe3 = svgElements svgSemiCircle (flagDERects (w,h) 2) (map svgStyle (colorRGB deYellow))
+flagDE (w,h) = stripe1 ++ stripe2 ++ stripe3
+        where stripe1 = svgElements svgRect (flagDERects (w,h) 0.0) (map svgStyle (colorRGB deBlack))
+              stripe2 = svgElements svgRect (flagDERects (w,h) 1.0) (map svgStyle (colorRGB deRed))
+              stripe3 = svgElements svgRect (flagDERects (w,h) 2.0) (map svgStyle (colorRGB deYellow))
               deBlack = (0,0,0)
               deRed = (255,0,0)              
               deYellow = (255,204,0)
 
 
-flagDERects :: (Float,Float) -> Int -> [Rect]
+flagDERects :: (Float,Float) -> Float -> [Rect]
 flagDERects (w,h) n = [rectangleLeft,rectangleRight]
         where rectangleLeft = ((0.0,n*(h/3)),w/2,h/3)
               rectangleRight = ((w/2,n*(h/3)),w,h/3)
@@ -161,19 +161,19 @@ main = do
     putStrLn ("Qual bandeira?")
     cmd <- getLine
     if cmd == "BR"
-        then do writeFile "imageBR.svg" $ svgstrs
-            where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
-                  svgfigs = flagBR (w,h)
-                  (w,h) = (1500,(14/20)*w)
+        then do writeFile "imageBR.svg" $ svgStrsBR
     else if cmd == "DE"
-        then do writeFile "imageDE.svg" $ svgstrs
-            where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
-                  svgfigs = flagDE (w,h)
-                  (w,h) = (1500,(3/5)*w)
+        then do writeFile "imageDE.svg" $ svgStrsDE
     else if cmd == "JP" 
-        then do writeFile "imageJP.svg" $ svgstrs 
-            where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
-                  svgfigs = flagJP (w,h)
-                  (w,h) = (1500,(2/3)*w)    
+        then do writeFile "imageJP.svg" $ svgStrsJP
     else return ()
+    where svgStrsBR = svgBegin wDE hDE ++ svgFigBR ++ svgEnd
+          svgFigBR  = flagBR (wBR,hBR)
+          svgStrsDE = svgBegin wDE hDE ++ svgFigDE ++ svgEnd
+          svgFigDE  = flagDE (wDE,hDE) 
+          svgStrsJP = svgBegin wJP hJP ++ svgFigJP ++ svgEnd
+          svgFigJP  = flagJP (wJP,hJP)
+          (wBR,hBR) = (1500,(14/20)*wBR)
+          (wDE,hDE) = (1500,(3/5)*wDE)
+          (wJP,hJP) = (1500,(2/3)*wJP)
     
