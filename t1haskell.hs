@@ -86,8 +86,8 @@ flagJPRects (w,h) = [rectangleLeft,rectangleRight]
 
 flagJPCircs :: (Float,Float) -> [Circle]
 flagJPCircs (w,h) = [circleLeft,circleRight]
-        where circleLeft = ((w/2,h/2),((3/5)*h),1)
-              circleRight = ((w/2,h/2),((3/5)*h),0)
+        where circleLeft = ((w/2,h/2),((3/10)*h),1)
+              circleRight = ((w/2,h/2),((3/10)*h),0)
 
 
 {--------------------------------------------------------------------------------------------------------------------
@@ -126,7 +126,7 @@ svgThreePointPath ((x0,y0),(x1,y1),(x2,y2)) style =
 
 svgSemiCircle :: Circle -> String -> String
 svgSemiCircle ((xc,yc),r,side) style =
-    printf "<path d='M%.3f,%.3f A%.1f,%.1f 0 0,%d %.3f,%.3f Z' style='%s' />\n" 
+    printf "<path d='M%.3f,%.3f A%.1f,%.1f 0 1,%d %.3f,%.3f Z' style='%s' />\n" 
             xc (yc+r) r r side xc (yc-r) style
 
 
@@ -167,7 +167,7 @@ main = do
     else if cmd == "JP" 
         then do writeFile "imageJP.svg" $ svgStrsJP
     else return ()
-    where svgStrsBR = svgBegin wDE hDE ++ svgFigBR ++ svgEnd
+    where svgStrsBR = svgBegin wBR hBR ++ svgFigBR ++ svgEnd
           svgFigBR  = flagBR (wBR,hBR)
           (wBR,hBR) = (1500,(14/20)*wBR)
           svgStrsDE = svgBegin wDE hDE ++ svgFigDE ++ svgEnd
