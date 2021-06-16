@@ -34,7 +34,7 @@ Caso o usuário digite algo diferente dessas siglas o programa encerra a execuç
 
 
 #### Exemplo:
-![alt text](https://raw.githubusercontent.com/elc117/2021haskellt1-kriguel/master/image.svg)
+![alt text]()
 
 
 ---
@@ -43,4 +43,5 @@ Caso o usuário digite algo diferente dessas siglas o programa encerra a execuç
 - https://www.youtube.com/watch?v=k6TWzfLGAKo
 - http://learnyouahaskell.com
 - https://www.w3schools.com/graphics/svg_intro.asp
+- Colegas Natã, Henrique e Anthony, no discord. :D
 

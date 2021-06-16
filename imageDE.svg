@@ -1,0 +1,8 @@
+<svg width='1500.00' height='900.00' xmlns='http://www.w3.org/2000/svg'>
+<rect x='0.000' y='0.000' width='750.00' height='300.00' style='fill:rgb(0,0,0); mix-blend-mode: normal;' />
+<rect x='750.000' y='0.000' width='750.00' height='300.00' style='fill:rgb(255,255,255); mix-blend-mode: normal;' />
+<rect x='0.000' y='300.000' width='750.00' height='300.00' style='fill:rgb(255,0,0); mix-blend-mode: normal;' />
+<rect x='750.000' y='300.000' width='750.00' height='300.00' style='fill:rgb(0,255,255); mix-blend-mode: normal;' />
+<rect x='0.000' y='600.000' width='750.00' height='300.00' style='fill:rgb(255,204,0); mix-blend-mode: normal;' />
+<rect x='750.000' y='600.000' width='750.00' height='300.00' style='fill:rgb(0,51,255); mix-blend-mode: normal;' />
+</svg>
