@@ -15,7 +15,7 @@ import Text.Printf
 type Color     = (Int,Int,Int)
 type Point     = (Float,Float)
 type Rect      = (Point,Float,Float)
-type Circle    = (Point,Float,Int)
+type Circle    = (Point,Float,Int)       -- O 'Int' eh utilizado para desenhar o semi-circulo usando svg path
 type Triangle  = (Point,Point,Point)
 
 
@@ -49,7 +49,7 @@ flagBR (w,h) = rectangle ++ diamond ++ circle
 flagBRRects :: (Float,Float) -> [Rect]
 flagBRRects (w,h) = [rectangleLeft,rectangleRight]
         where rectangleLeft = ((0.0,0.0),w/2,h)
-              rectangleRight = ((w/2,0),w,h)
+              rectangleRight = ((w/2,0.0),w/2,h)
 
 
 flagBRCircs :: (Float,Float) -> [Circle]
@@ -64,6 +64,50 @@ flagBRTriangs (w,h) = [triangleLeft,triangleRight]
         where triangleLeft = ((1.7*n,h/2),(w/2,1.7*n),(w/2,h-1.7*n))
               triangleRight = ((w-1.7*n,h/2),(w/2,1.7*n),(w/2,h-1.7*n))
               n = w/20
+
+
+{--------------------------------------------------------------------------------------------------------------------
+|                                 Funcoes que constroem a bandeira do Japao                                         |
+-}-------------------------------------------------------------------------------------------------------------------
+
+flagJP :: (Float,Float) -> String
+flagJP (w,h) = rectangle ++ circle
+        where rectangle = svgElements svgRect (flagJPRects (w,h)) (map svgStyle (colorRGB jpWhite))
+              circle = svgElements svgSemiCircle (flagJPCircs (w,h)) (map svgStyle (colorRGB jpRed))
+              jpRed = (190,0,41)
+              jpWhite = (255,255,255)
+
+
+flagJPRects :: (Float,Float) -> [Rect]
+flagJPRects (w,h) = [rectangleLeft,rectangleRight]
+        where rectangleLeft = ((0.0,0.0),w/2,h)
+              rectangleRight = ((w/2,0.0),w/2,h)
+
+
+flagJPCircs :: (Float,Float) -> [Circle]
+flagJPCircs (w,h) = [circleLeft,circleRight]
+        where circleLeft = ((w/2,h/2),((3/10)*h),1)
+              circleRight = ((w/2,h/2),((3/10)*h),0)
+
+
+{--------------------------------------------------------------------------------------------------------------------
+|                                Funcoes que constroem a bandeira da Alemanha                                       |
+-}-------------------------------------------------------------------------------------------------------------------
+
+flagDE :: (Float,Float) -> String
+flagDE (w,h) = stripe1 ++ stripe2 ++ stripe3
+        where stripe1 = svgElements svgRect (flagDERects (w,h) 0.0) (map svgStyle (colorRGB deBlack))
+              stripe2 = svgElements svgRect (flagDERects (w,h) 1.0) (map svgStyle (colorRGB deRed))
+              stripe3 = svgElements svgRect (flagDERects (w,h) 2.0) (map svgStyle (colorRGB deYellow))
+              deBlack = (0,0,0)
+              deRed = (255,0,0)              
+              deYellow = (255,204,0)
+
+
+flagDERects :: (Float,Float) -> Float -> [Rect]
+flagDERects (w,h) n = [rectangleLeft,rectangleRight]
+        where rectangleLeft = ((0.0,n*(h/3)),w/2,h/3)
+              rectangleRight = ((w/2,n*(h/3)),w/2,h/3)
 
 
 {--------------------------------------------------------------------------------------------------------------------
@@ -82,8 +126,8 @@ svgThreePointPath ((x0,y0),(x1,y1),(x2,y2)) style =
 
 svgSemiCircle :: Circle -> String -> String
 svgSemiCircle ((xc,yc),r,side) style =
-    printf "<path d='M%.3f,%.3f L%.3f,%.3f A%.1f,%.1f 0 1,%d %.3f,%.3f' style='%s' />\n" 
-            xc (yc-r) xc (yc+r) r r side xc (yc-r) style
+    printf "<path d='M%.3f,%.3f A%.1f,%.1f 0 1,%d %.3f,%.3f Z' style='%s' />\n" 
+            xc (yc+r) r r side xc (yc-r) style
 
 
 {--------------------------------------------------------------------------------------------------------------------
@@ -109,12 +153,26 @@ svgElements func elements styles = concat $ zipWith func elements styles
 
 
 {--------------------------------------------------------------------------------------------------------------------
-|                                           Funcao main                                                             |
+|                                Funcao main, define qual bandeira sera desenhada                                   |
 -}-------------------------------------------------------------------------------------------------------------------
 
 main :: IO ()
 main = do
-    writeFile "image.svg" $ svgstrs
-    where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
-          svgfigs = flagBR (w,h)
-          (w,h) = (1500,(14/20)*w)
+    putStrLn ("Qual bandeira?")
+    cmd <- getLine
+    if cmd == "BR"
+        then do writeFile "imageBR.svg" $ svgStrsBR
+    else if cmd == "DE"
+        then do writeFile "imageDE.svg" $ svgStrsDE
+    else if cmd == "JP" 
+        then do writeFile "imageJP.svg" $ svgStrsJP
+    else return ()
+    where svgStrsBR = svgBegin wBR hBR ++ svgFigBR ++ svgEnd
+          svgFigBR  = flagBR (wBR,hBR)
+          (wBR,hBR) = (1500,(14/20)*wBR)
+          svgStrsDE = svgBegin wDE hDE ++ svgFigDE ++ svgEnd
+          svgFigDE  = flagDE (wDE,hDE)
+          (wDE,hDE) = (1500,(3/5)*wDE)
+          svgStrsJP = svgBegin wJP hJP ++ svgFigJP ++ svgEnd
+          svgFigJP  = flagJP (wJP,hJP)
+          (wJP,hJP) = (1500,(2/3)*wJP)
