@@ -34,7 +34,7 @@ Caso o usuário digite algo diferente dessas siglas o programa encerra a execuç
 
 ---
 
-#### Exemplos:
+#### Resultados:
 - Brasil:  
 ![alt text](https://raw.githubusercontent.com/elc117/2021haskellt1-kriguel/master/imageBR.svg)  
 
