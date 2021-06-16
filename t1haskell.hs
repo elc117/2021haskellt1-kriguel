@@ -49,7 +49,7 @@ flagBR (w,h) = rectangle ++ diamond ++ circle
 flagBRRects :: (Float,Float) -> [Rect]
 flagBRRects (w,h) = [rectangleLeft,rectangleRight]
         where rectangleLeft = ((0.0,0.0),w/2,h)
-              rectangleRight = ((w/2,0.0),w,h)
+              rectangleRight = ((w/2,0.0),w/2,h)
 
 
 flagBRCircs :: (Float,Float) -> [Circle]
@@ -81,7 +81,7 @@ flagJP (w,h) = rectangle ++ circle
 flagJPRects :: (Float,Float) -> [Rect]
 flagJPRects (w,h) = [rectangleLeft,rectangleRight]
         where rectangleLeft = ((0.0,0.0),w/2,h)
-              rectangleRight = ((w/2,0.0),w,h)
+              rectangleRight = ((w/2,0.0),w/2,h)
 
 
 flagJPCircs :: (Float,Float) -> [Circle]
@@ -107,7 +107,7 @@ flagDE (w,h) = stripe1 ++ stripe2 ++ stripe3
 flagDERects :: (Float,Float) -> Float -> [Rect]
 flagDERects (w,h) n = [rectangleLeft,rectangleRight]
         where rectangleLeft = ((0.0,n*(h/3)),w/2,h/3)
-              rectangleRight = ((w/2,n*(h/3)),w,h/3)
+              rectangleRight = ((w/2,n*(h/3)),w/2,h/3)
 
 
 {--------------------------------------------------------------------------------------------------------------------
@@ -126,8 +126,8 @@ svgThreePointPath ((x0,y0),(x1,y1),(x2,y2)) style =
 
 svgSemiCircle :: Circle -> String -> String
 svgSemiCircle ((xc,yc),r,side) style =
-    printf "<path d='M%.3f,%.3f L%.3f,%.3f A%.1f,%.1f 0 1,%d %.3f,%.3f' style='%s' />\n" 
-            xc (yc-r) xc (yc+r) r r side xc (yc-r) style
+    printf "<path d='M%.3f,%.3f A%.1f,%.1f 0 0,%d %.3f,%.3f Z' style='%s' />\n" 
+            xc (yc+r) r r side xc (yc-r) style
 
 
 {--------------------------------------------------------------------------------------------------------------------
@@ -169,11 +169,10 @@ main = do
     else return ()
     where svgStrsBR = svgBegin wDE hDE ++ svgFigBR ++ svgEnd
           svgFigBR  = flagBR (wBR,hBR)
+          (wBR,hBR) = (1500,(14/20)*wBR)
           svgStrsDE = svgBegin wDE hDE ++ svgFigDE ++ svgEnd
-          svgFigDE  = flagDE (wDE,hDE) 
+          svgFigDE  = flagDE (wDE,hDE)
+          (wDE,hDE) = (1500,(3/5)*wDE)
           svgStrsJP = svgBegin wJP hJP ++ svgFigJP ++ svgEnd
           svgFigJP  = flagJP (wJP,hJP)
-          (wBR,hBR) = (1500,(14/20)*wBR)
-          (wDE,hDE) = (1500,(3/5)*wDE)
           (wJP,hJP) = (1500,(2/3)*wJP)
-    
